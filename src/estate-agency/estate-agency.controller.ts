@@ -19,6 +19,7 @@ import {
 import { EstateAgencyService } from './estate-agency.service';
 import { InsertEstateAgencyDTO } from './dtos';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ValidateUploadImage } from 'src/config/pipes';
 
 @Controller('estate-agency')
 export class EstateAgencyController {
@@ -59,16 +60,7 @@ export class EstateAgencyController {
   @Post('upload-logo')
   @UseInterceptors(FileInterceptor('logo'))
   uploadEstateAgencyLogo(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: '.(png|jpg|jpeg)' })],
-        errorHttpStatusCode: HttpStatus.BAD_REQUEST,
-        exceptionFactory: () =>
-          new BadRequestException(
-            'باشد jpg , jpeg , png نوع فایل ارسالی باید از جنس ',
-          ),
-      }),
-    )
+    @UploadedFile(ValidateUploadImage)
     logo: Express.Multer.File,
   ) {
     return this.estateAgencyService.uploadEstateAgencyLogo(logo);
