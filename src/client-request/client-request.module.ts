@@ -4,6 +4,6 @@ import { ClientRequestController } from './client-request.controller';
 
 @Module({
   providers: [ClientRequestService],
-  controllers: [ClientRequestController]
+  controllers: [ClientRequestController],
 })
 export class ClientRequestModule {}

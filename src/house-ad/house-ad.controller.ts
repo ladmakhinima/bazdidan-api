@@ -31,8 +31,11 @@ export class HouseAdController {
   }
 
   @Get()
-  getHouseAds(@Query('limit') limit: number, @Query('page') page: number) {
-    return this.houseAdService.getListsOfHouseAd(page, limit);
+  getHouseAds(
+    @Query('limit') limit: number = 10,
+    @Query('page') page: number = 0,
+  ) {
+    return this.houseAdService.getListsOfHouseAd(+page, +limit);
   }
 
   @Get(':id')

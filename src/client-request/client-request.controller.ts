@@ -28,7 +28,7 @@ export class ClientRequestController {
     @Query('page') page: number = 0,
     @Query('limit') limit: number = 10,
   ) {
-    return this.clientRequestService.createRequest(user, dto, page, limit);
+    return this.clientRequestService.createRequest(user, dto, +page, +limit);
   }
 
   @Get('collections/:mode')
@@ -41,8 +41,8 @@ export class ClientRequestController {
     @Query('estateAgencyId') estateAgencyId?: number,
   ) {
     return this.clientRequestService.getClientRequestsList(
-      page,
-      limit,
+      +page,
+      +limit,
       mode,
       user,
       estateAgencyId,

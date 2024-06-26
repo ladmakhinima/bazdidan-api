@@ -52,12 +52,12 @@ export class UserController {
   }
 
   @Get(':role')
-  findUsers(@Param('role', RolePipe) role: string, @Query() query: any) {
-    return this.userService.findUsers(
-      role.toUpperCase() as any,
-      query.page,
-      query.limit,
-    );
+  findUsers(
+    @Param('role', RolePipe) role: string,
+    @Query('page') page: number = 0,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.userService.findUsers(role.toUpperCase() as any, +page, +limit);
   }
 
   @Post('upload-profile')

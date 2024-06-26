@@ -50,11 +50,11 @@ export class EstateAgencyController {
   }
 
   @Get()
-  findAllEStateAgencies(@Query() query: any) {
-    return this.estateAgencyService.findAllEstateAgencies(
-      query.page,
-      query.limit,
-    );
+  findAllEStateAgencies(
+    @Query('page') page: number = 0,
+    @Query('limit') limit: number,
+  ) {
+    return this.estateAgencyService.findAllEstateAgencies(+page, +limit);
   }
 
   @Post('upload-logo')

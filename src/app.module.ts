@@ -5,15 +5,19 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { HouseAdModule } from './house-ad/house-ad.module';
 import { ClientRequestModule } from './client-request/client-request.module';
+import { NotificationModule } from './notification/notification.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot({ global: true }),
     ConfigModule,
     EstateAgencyModule,
     UserModule,
     AuthModule,
     HouseAdModule,
     ClientRequestModule,
+    NotificationModule,
   ],
 })
 export class AppModule {}

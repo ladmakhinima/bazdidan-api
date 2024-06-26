@@ -10,7 +10,7 @@ import { AccessTokenGuard } from './guards';
 import { TokenGeneratorUtilService } from './utils';
 
 @Module({
-  exports: [],
+  exports: [JwtService],
   providers: [
     AuthService,
     JwtService,

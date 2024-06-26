@@ -86,11 +86,11 @@ export class HouseAdService {
     });
   }
 
-  async getListsOfHouseAd(page: number = 0, limit: number = 10) {
+  async getListsOfHouseAd(page: number, limit: number) {
     const houseAds = await this.prismaService.houseAd.findMany({
       orderBy: { createdAt: 'desc' },
-      take: limit,
       skip: limit * page,
+      take: limit,
     });
     const houseAdsCount = await this.prismaService.houseAd.count();
     return {

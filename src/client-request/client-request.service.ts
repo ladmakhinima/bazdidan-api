@@ -4,13 +4,15 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { EstateAgency, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { CreateClientRequestDTO } from './dtos';
 import { PrismaService } from 'src/config/prisma/prisma.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class ClientRequestService {
   @Inject(PrismaService) private readonly prisma: PrismaService;
+  @Inject(EventEmitter2) private readonly eventEmitter: EventEmitter2;
 
   async createRequest(
     user: User,
@@ -19,7 +21,7 @@ export class ClientRequestService {
     limit: number,
   ) {
     const condition: { [key: string]: any } = { ...dto };
-    if (dto.options) condition.options = { equals: dto.options };
+    if (dto.options) condition.options = { contains: dto.options };
 
     const houseAds = await this.prisma.houseAd.findMany({
       where: condition,
@@ -45,9 +47,13 @@ export class ClientRequestService {
       });
 
       //   send notification through websocket to consultant
-      this._sendNotificationToConsultant(houseAd.consultant);
+      this.eventEmitter.emit('SEND_MESSAGE_TO_CONSULTANT_FOR_REQUEST', {
+        houseAd,
+      });
       //   send notification through websocket to estateAgency
-      this._sendNotificationToEstateAgency(houseAd.estateAgency);
+      this.eventEmitter.emit('SEND_MESSAGE_TO_CONSULTANT_FOR_REQUEST', {
+        houseAd,
+      });
     }
 
     return {
@@ -79,7 +85,7 @@ export class ClientRequestService {
         break;
       case 'estate-agency': {
         const estateAgency = await this.prisma.estateAgency.findUnique({
-          where: { id: estateAgencyId },
+          where: { id: +estateAgencyId },
         });
         if (!estateAgency) {
           throw new NotFoundException('آژانس ملکی یافت نشد');
@@ -130,7 +136,4 @@ export class ClientRequestService {
 
     return clientRequest;
   }
-
-  _sendNotificationToEstateAgency(estateAgency: EstateAgency) {}
-  _sendNotificationToConsultant(consultant: User) {}
 }
