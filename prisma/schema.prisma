@@ -36,36 +36,39 @@ enum UserRole {
 }
 
 model EstateAgency {
-  id          Int                @id @default(autoincrement())
-  managerName String             @db.VarChar(255)
-  name        String             @unique @db.VarChar(255)
-  status      EstateAgencyStatus @default(NOT_APPROVE)
-  logo        String             @db.Text
-  phone       String             @db.VarChar(255)
-  address     String             @db.Text
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  deletedAt   DateTime?
-  HouseAd     HouseAd[]
+  id            Int                @id @default(autoincrement())
+  managerName   String             @db.VarChar(255)
+  name          String             @unique @db.VarChar(255)
+  status        EstateAgencyStatus @default(NOT_APPROVE)
+  logo          String             @db.Text
+  phone         String             @db.VarChar(255)
+  address       String             @db.Text
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  deletedAt     DateTime?
+  houseAd       HouseAd[]          @relation("houseAd")
+  clientRequest ClientRequest[]    @relation("estateAgencyRequest")
 
   @@index([name, createdAt(sort: Desc)])
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  firstName    String         @db.VarChar(255)
-  lastName     String         @db.VarChar(255)
-  phone        String         @unique @db.VarChar(12)
-  password     String         @db.Text
-  profile      String         @db.Text
-  status       UserStatus     @default(ACTIVE)
-  bio          String?        @db.Text
-  role         UserRole
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  deletedAt    DateTime?
-  RefreshToken RefreshToken[]
-  HouseAd      HouseAd[]
+  id                Int             @id @default(autoincrement())
+  firstName         String          @db.VarChar(255)
+  lastName          String          @db.VarChar(255)
+  phone             String          @unique @db.VarChar(12)
+  password          String          @db.Text
+  profile           String          @db.Text
+  status            UserStatus      @default(ACTIVE)
+  bio               String?         @db.Text
+  role              UserRole
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  deletedAt         DateTime?
+  RefreshToken      RefreshToken[]
+  HouseAd           HouseAd[]
+  clientRequest     ClientRequest[] @relation("clientRequest")
+  consultantRequest ClientRequest[] @relation("consultantRequest")
 
   @@index([phone])
 }
@@ -97,14 +100,37 @@ model HouseAd {
   roomNumber         Int
   address            String       @db.VarChar(255)
   options            String[]
-  estateAgency       EstateAgency @relation(fields: [estateAgencyId], references: [id])
+  estateAgency       EstateAgency @relation(fields: [estateAgencyId], references: [id], name: "houseAd")
   estateAgencyId     Int
   consultant         User         @relation(fields: [consultantId], references: [id])
   consultantId       Int
 
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  deletedAt DateTime?
+  request   ClientRequest[] @relation("request")
+
+  @@index([houseType, roomNumber, yearOfConstruction(sort: Desc)])
+}
+
+model ClientRequest {
+  id Int @id @default(autoincrement())
+
+  houseAd   HouseAd @relation(fields: [houseAdId], references: [id], name: "request")
+  houseAdId Int
+
+  client   User @relation(fields: [clientId], references: [id], name: "clientRequest")
+  clientId Int
+
+  consultant   User @relation(fields: [consultantId], references: [id], name: "consultantRequest")
+  consultantId Int
+
+  estateAgency   EstateAgency @relation(fields: [estateAgencyId], name: "estateAgencyRequest", references: [id])
+  estateAgencyId Int
+
+  options Json[] @default([])
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-
-  @@index([houseType, roomNumber, yearOfConstruction(sort: Desc)])
 }
