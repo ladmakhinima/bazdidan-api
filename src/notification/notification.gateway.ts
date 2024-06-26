@@ -17,6 +17,8 @@ import { JWT_KEY } from 'src/constants/env.constant';
 export class NotificationGateway
   implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection
 {
+  private clients: Map<number, Socket> = new Map();
+
   @Inject(JwtService) private readonly jwtService: JwtService;
   @Inject(ConfigService) private readonly configService: ConfigService;
   @WebSocketServer() ws: Socket;
@@ -26,6 +28,9 @@ export class NotificationGateway
   }
 
   handleDisconnect(client: Socket) {
+    if (client?.data?.user?.id) {
+      this.clients.delete(client?.data?.user?.id);
+    }
     console.log('Client Disconnected');
   }
 
@@ -41,13 +46,21 @@ export class NotificationGateway
       secret: this.configService.get<string>(JWT_KEY),
     });
 
+    if (!decodedToken?.id) {
+      client.disconnect();
+      return;
+    }
+
     client.data.user = decodedToken;
+
+    this.clients.set(decodedToken.id, client);
 
     console.log('Client Connected');
   }
 
   @OnEvent('SEND_MESSAGE_TO_CONSULTANT_FOR_REQUEST')
   sendMessageToConsultantForRequest(data) {
+    // !TODO: send message with client map to only send message to one user
     this.ws.emit('client_request_consultant_receive_ad', data);
   }
 
