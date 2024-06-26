@@ -1,10 +1,10 @@
 import { EstateAgency, HouseAdType, HouseType } from '@prisma/client';
 import {
   IsArray,
-  IsDecimal,
   IsEnum,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsString,
   MinLength,
 } from 'class-validator';
@@ -20,7 +20,10 @@ export class CreateHouseAdDTO {
   type: HouseAdType;
 
   @IsNotEmpty({ message: 'قیمت براساس هر متر الزامی میباشد' })
-  @IsDecimal()
+  @IsNumber(
+    { maxDecimalPlaces: 2 },
+    { message: 'فرمت قیمت براساس هر متر نادرست میباشد' },
+  )
   pricePerMeter: number;
 
   @IsNotEmpty({ message: 'توضیحات آگهی الزامی میباشد' })
@@ -31,7 +34,7 @@ export class CreateHouseAdDTO {
   description: string;
 
   @IsNotEmpty({ message: 'سال ساخت خانه الزامی میباشد' })
-  @IsString()
+  @IsString({ message: 'سال ساخت را وارد کنید' })
   yearOfConstruction: string;
 
   @IsNotEmpty({ message: 'فایل های پیوست مربوط به آگهی الزامی میباشد' })

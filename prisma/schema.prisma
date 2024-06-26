@@ -65,6 +65,7 @@ model User {
   updatedAt    DateTime       @updatedAt
   deletedAt    DateTime?
   RefreshToken RefreshToken[]
+  HouseAd      HouseAd[]
 
   @@index([phone])
 }
@@ -98,6 +99,8 @@ model HouseAd {
   options            String[]
   estateAgency       EstateAgency @relation(fields: [estateAgencyId], references: [id])
   estateAgencyId     Int
+  consultant         User         @relation(fields: [consultantId], references: [id])
+  consultantId       Int
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
