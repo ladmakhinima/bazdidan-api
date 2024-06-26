@@ -9,6 +9,7 @@ import { PrismaService } from 'src/config/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import * as path from 'path';
 import * as jimp from 'jimp';
+import { UserRole } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -16,7 +17,7 @@ export class UserService {
 
   async createUser(dto: CreateUserDTO) {
     const duplicatedByPhone = await this.prisma.user.findUnique({
-      where: { phone: dto.phone },
+      where: { phone: dto.phone, deletedAt: null },
     });
     if (duplicatedByPhone) {
       throw new ConflictException(
@@ -38,7 +39,7 @@ export class UserService {
     });
   }
 
-  async findUserById(id: number, role: 'CLIENT' | 'ESTATE_CONSULTANT') {
+  async findUserById(id: number, role: UserRole) {
     const user = await this.prisma.user.findUnique({
       where: { id, role },
     });
@@ -51,7 +52,7 @@ export class UserService {
   }
 
   async findUsers(
-    role: 'CLIENT' | 'ESTATE_CONSULTANT' | 'BOTH',
+    role: UserRole | 'BOTH',
     page: number = 0,
     limit: number = 10,
   ) {
