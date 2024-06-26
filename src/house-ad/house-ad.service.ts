@@ -1,11 +1,12 @@
 import {
+  BadRequestException,
   ConflictException,
   Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma/prisma.service';
-import { CreateHouseAdDTO } from './dtos';
+import { CreateHouseAdDTO, UpdateHouseAdDTO } from './dtos';
 import { User } from '@prisma/client';
 
 @Injectable()
@@ -44,11 +45,86 @@ export class HouseAdService {
     });
   }
 
-  getListsOfHouseAd() {}
+  async updateHouseAdById(id: number, dto: UpdateHouseAdDTO, user: User) {
+    const houseAd = await this.prismaService.houseAd.findFirst({
+      where: { id },
+    });
+    if (!houseAd) {
+      throw new NotFoundException('آگهی ملک یافت نشد');
+    }
+    if (houseAd.consultantId !== user.id) {
+      throw new BadRequestException(
+        'تنها خود سازنده این آگهی قادر به ویرایش میباشد',
+      );
+    }
+    const duplicatedByTitle = await this.prismaService.houseAd.findUnique({
+      where: {
+        title: dto.title,
+        NOT: { id },
+      },
+    });
+    if (duplicatedByTitle) {
+      throw new ConflictException('موضوع آگهی وارد شده تکراری میباشد');
+    }
+    return this.prismaService.houseAd.update({
+      where: { id },
+      data: {
+        title: dto.title,
+        address: dto.address,
+        description: dto.description,
+        houseType: dto.houseType,
+        meterage: dto.meterage,
+        pricePerMeter: dto.pricePerMeter,
+        roomNumber: dto.roomNumber,
+        yearOfConstruction: dto.yearOfConstruction,
+        attachments: dto.attachments,
+        type: dto.type,
+        options: dto.options,
+      },
+    });
+  }
 
-  getHouseAdById() {}
+  async getListsOfHouseAd(page: number = 0, limit: number = 10) {
+    const houseAds = await this.prismaService.houseAd.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+      skip: limit * page,
+    });
+    const houseAdsCount = await this.prismaService.houseAd.count();
+    return {
+      content: houseAds,
+      count: houseAdsCount,
+      currentPage: page,
+      totalPage: Math.ceil(houseAdsCount / limit),
+    };
+  }
 
-  deleteHouseAdById() {}
+  async getHouseAdById(id: number) {
+    const houseAd = await this.prismaService.houseAd.findFirst({
+      where: { id },
+      include: {
+        consultant: true,
+        estateAgency: true,
+      },
+    });
+    if (!houseAd) {
+      throw new NotFoundException('آگهی ملک یافت نشد');
+    }
+    return houseAd;
+  }
 
-  updateHouseAdById() {}
+  async deleteHouseAdById(id: number, user: User) {
+    const houseAd = await this.prismaService.houseAd.findFirst({
+      where: { id },
+    });
+    if (!houseAd) {
+      throw new NotFoundException('آگهی ملک یافت نشد');
+    }
+    if (houseAd.consultantId !== user.id) {
+      throw new BadRequestException(
+        'تنها خود سازنده این آگهی قادر به ویرایش میباشد',
+      );
+    }
+    return this.prismaService.houseAd.delete({ where: { id } });
+  }
 }

@@ -67,7 +67,12 @@ export class UserService {
       ...generalCondition,
     });
     const count = await this.prisma.user.count({ ...generalCondition });
-    return { content, count };
+    return {
+      content,
+      count,
+      currentPage: page,
+      totalPage: Math.ceil(count / limit),
+    };
   }
 
   async deleteUserById(id: number) {
