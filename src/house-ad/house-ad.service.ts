@@ -8,6 +8,8 @@ import {
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { CreateHouseAdDTO, UpdateHouseAdDTO } from './dtos';
 import { User } from '@prisma/client';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class HouseAdService {
@@ -126,5 +128,17 @@ export class HouseAdService {
       );
     }
     return this.prismaService.houseAd.delete({ where: { id } });
+  }
+
+  async uploadAttchments(files: Express.Multer.File[]) {
+    const uploadedFiles: string[] = [];
+    const filePath = path.join(__dirname, '..', '..', 'public', 'house-ads');
+    for (let file of files) {
+      const fileExtension = path.extname(file.originalname);
+      const fileName = `${new Date().getTime()}-${Math.random() * 100000000}${fileExtension}`;
+      fs.createWriteStream(filePath + '/' + fileName).write(file.buffer);
+      uploadedFiles.push(fileName);
+    }
+    return uploadedFiles;
   }
 }

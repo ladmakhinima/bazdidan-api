@@ -9,13 +9,16 @@ import {
   Post,
   Put,
   Query,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateHouseAdDTO, UpdateHouseAdDTO } from './dtos';
 import { AccessTokenGuard } from 'src/auth/guards';
 import { LoggedInUser } from 'src/config/decorators';
 import { User } from '@prisma/client';
 import { HouseAdService } from './house-ad.service';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('house-ad')
 export class HouseAdController {
@@ -54,5 +57,12 @@ export class HouseAdController {
     @LoggedInUser() user: User,
   ) {
     return this.houseAdService.deleteHouseAdById(id, user);
+  }
+
+  @Post('upload-attachments')
+  @UseGuards(AccessTokenGuard)
+  @UseInterceptors(FilesInterceptor('files'))
+  uploadAttachments(@UploadedFiles() files: Express.Multer.File[]) {
+    return this.houseAdService.uploadAttchments(files);
   }
 }
