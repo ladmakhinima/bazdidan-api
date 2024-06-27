@@ -7,6 +7,7 @@ import { HouseAdModule } from './house-ad/house-ad.module';
 import { ClientRequestModule } from './client-request/client-request.module';
 import { NotificationModule } from './notification/notification.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     HouseAdModule,
     ClientRequestModule,
     NotificationModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}

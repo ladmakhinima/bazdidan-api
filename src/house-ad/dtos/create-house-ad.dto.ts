@@ -1,4 +1,4 @@
-import { EstateAgency, HouseAdType, HouseType } from '@prisma/client';
+import { Category, EstateAgency, HouseAdType, HouseType } from '@prisma/client';
 import {
   IsArray,
   IsEnum,
@@ -14,6 +14,10 @@ export class CreateHouseAdDTO {
   @IsString()
   @MinLength(3, { message: 'موضوع آگهی باید حداقل از 3 حرف تشکیل شده باشد' })
   title: string;
+
+  @IsNotEmpty({ message: 'دسته بندی مربوط به آگهی الزامی میباشد' })
+  @IsInt()
+  category: number | Category;
 
   @IsNotEmpty({ message: 'نوع آگهی الزامی میباشد' })
   @IsEnum(HouseAdType, { message: 'نوع آگهی وارد شده نادرست میباشد' })

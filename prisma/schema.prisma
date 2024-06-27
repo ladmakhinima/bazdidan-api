@@ -104,6 +104,8 @@ model HouseAd {
   estateAgencyId     Int
   consultant         User         @relation(fields: [consultantId], references: [id])
   consultantId       Int
+  category           Category     @relation(fields: [categoryId], references: [id], name: "houseAds")
+  categoryId         Int
 
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
@@ -133,4 +135,15 @@ model ClientRequest {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  title     String    @unique @db.VarChar(255)
+  image     String    @db.Text
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  houseAds  HouseAd[] @relation("houseAds")
+  isVisible Boolean   @default(true)
 }

@@ -28,6 +28,12 @@ export class HouseAdService {
     if (!dto.estateAgency) {
       throw new NotFoundException('آژانس تبلیغاتی یافت نشد');
     }
+    dto.category = await this.prismaService.category.findUnique({
+      where: { id: dto.category as number },
+    });
+    if (!dto.category) {
+      throw new NotFoundException('دسته بندی یافت نشد');
+    }
     return this.prismaService.houseAd.create({
       data: {
         title: dto.title,
@@ -43,6 +49,7 @@ export class HouseAdService {
         type: dto.type,
         options: dto.options,
         consultantId: user.id,
+        categoryId: dto.category.id,
       },
     });
   }
@@ -58,6 +65,17 @@ export class HouseAdService {
       throw new BadRequestException(
         'تنها خود سازنده این آگهی قادر به ویرایش میباشد',
       );
+    }
+    if (houseAd.categoryId !== (dto.category as number)) {
+      const category = await this.prismaService.category.findUnique({
+        where: { id: dto.category as number },
+      });
+
+      if (!category) {
+        throw new NotFoundException('دسته بندی یافت نشد');
+      }
+
+      dto.category = category.id;
     }
     const duplicatedByTitle = await this.prismaService.houseAd.findUnique({
       where: {
