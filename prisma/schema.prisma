@@ -94,54 +94,47 @@ model RefreshToken {
 }
 
 model HouseAd {
-  id                 Int          @id @default(autoincrement())
-  title              String       @unique @db.VarChar(255)
-  type               HouseAdType  @default(SIMPLE)
-  pricePerMeter      Decimal      @db.Money
+  id                 Int             @id @default(autoincrement())
+  title              String          @unique @db.VarChar(255)
+  type               HouseAdType     @default(SIMPLE)
+  pricePerMeter      Decimal         @db.Money
   houseType          HouseType
-  description        String       @db.Text
-  yearOfConstruction String       @db.VarChar(255)
+  description        String          @db.Text
+  yearOfConstruction String          @db.VarChar(255)
   attachments        String[]
   meterage           Int
   roomNumber         Int
-  address            String       @db.VarChar(255)
+  address            String          @db.VarChar(255)
   options            String[]
-  estateAgency       EstateAgency @relation(fields: [estateAgencyId], references: [id], name: "houseAd")
+  estateAgency       EstateAgency    @relation(fields: [estateAgencyId], references: [id], name: "houseAd")
   estateAgencyId     Int
-  consultant         User         @relation(fields: [consultantId], references: [id])
+  consultant         User            @relation(fields: [consultantId], references: [id])
   consultantId       Int
-  category           Category     @relation(fields: [categoryId], references: [id], name: "houseAds")
+  category           Category        @relation(fields: [categoryId], references: [id], name: "houseAds")
   categoryId         Int
-
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
-  deletedAt DateTime?
-  request   ClientRequest[] @relation("request")
-  chats     Chat[]          @relation("chats")
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  deletedAt          DateTime?
+  request            ClientRequest[] @relation("request")
+  chats              Chat[]          @relation("chats")
 
   @@index([houseType, roomNumber, yearOfConstruction(sort: Desc)])
 }
 
 model ClientRequest {
-  id Int @id @default(autoincrement())
-
-  houseAd   HouseAd @relation(fields: [houseAdId], references: [id], name: "request")
-  houseAdId Int
-
-  client   User @relation(fields: [clientId], references: [id], name: "clientRequest")
-  clientId Int
-
-  consultant   User @relation(fields: [consultantId], references: [id], name: "consultantRequest")
-  consultantId Int
-
+  id             Int          @id @default(autoincrement())
+  houseAd        HouseAd      @relation(fields: [houseAdId], references: [id], name: "request")
+  houseAdId      Int
+  client         User         @relation(fields: [clientId], references: [id], name: "clientRequest")
+  clientId       Int
+  consultant     User         @relation(fields: [consultantId], references: [id], name: "consultantRequest")
+  consultantId   Int
   estateAgency   EstateAgency @relation(fields: [estateAgencyId], name: "estateAgencyRequest", references: [id])
   estateAgencyId Int
-
-  options Json[] @default([])
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  options        Json[]       @default([])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
 }
 
 model Category {
