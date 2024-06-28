@@ -110,7 +110,7 @@ export class CategoryService {
       'categories',
       fileName,
     );
-    fs.createWriteStream(file.buffer).write(filePath);
+    fs.createWriteStream(filePath).write(file.buffer);
     return { fileName };
   }
 }
