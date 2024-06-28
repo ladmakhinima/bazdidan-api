@@ -48,6 +48,7 @@ model EstateAgency {
   deletedAt     DateTime?
   houseAd       HouseAd[]          @relation("houseAd")
   clientRequest ClientRequest[]    @relation("estateAgencyRequest")
+  employees     User[]             @relation("employees")
 
   @@index([name, createdAt(sort: Desc)])
 }
@@ -69,6 +70,11 @@ model User {
   HouseAd           HouseAd[]
   clientRequest     ClientRequest[] @relation("clientRequest")
   consultantRequest ClientRequest[] @relation("consultantRequest")
+  sendedMessages    Chat[]          @relation("sendedMessages")
+  receivedMessages  Chat[]          @relation("receivedMessages")
+  isOnline          Boolean         @default(false)
+  estateAgency      EstateAgency    @relation(fields: [estateAgencyId], references: [id], name: "employees")
+  estateAgencyId    Int
 
   @@index([phone])
 }
@@ -111,6 +117,7 @@ model HouseAd {
   updatedAt DateTime        @updatedAt
   deletedAt DateTime?
   request   ClientRequest[] @relation("request")
+  chats     Chat[]          @relation("chats")
 
   @@index([houseType, roomNumber, yearOfConstruction(sort: Desc)])
 }
@@ -146,4 +153,22 @@ model Category {
   deletedAt DateTime?
   houseAds  HouseAd[] @relation("houseAds")
   isVisible Boolean   @default(true)
+}
+
+model Chat {
+  id          Int       @id @default(autoincrement())
+  content     String    @db.Text
+  attachments String[]  @default([])
+  sender      User      @relation(fields: [senderId], references: [id], name: "sendedMessages")
+  senderId    Int
+  receiver    User      @relation(fields: [receiverId], references: [id], name: "receivedMessages")
+  receiverId  Int
+  parent      Chat?     @relation(fields: [parentId], references: [id], name: "childrens")
+  parentId    Int
+  childrens   Chat[]    @relation("childrens")
+  houseAd     HouseAd   @relation(fields: [houseAdId], references: [id], name: "chats")
+  houseAdId   Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
 }

@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsInt,
   IsNotEmpty,
   IsPhoneNumber,
   IsString,
@@ -7,6 +8,7 @@ import {
   Validate,
 } from 'class-validator';
 import { BioCheckerValidator } from '../validator';
+import { EstateAgency } from '@prisma/client';
 
 export class CreateUserDTO {
   @IsNotEmpty({ message: 'وارد کردن نام کاربر الزامی میباشد' })
@@ -44,4 +46,8 @@ export class CreateUserDTO {
   @IsNotEmpty()
   @IsBoolean({ message: 'مشخص کردن کاربر یا مشاور املاک بودن الزامی میباشد' })
   isClient: boolean;
+
+  @IsNotEmpty({ message: 'پر کردن آژانس ملکی الزامی میباشد' })
+  @IsInt({ message: 'شناسه آژانس ملکی باید عددی باشد' })
+  estateAgency: number | EstateAgency;
 }

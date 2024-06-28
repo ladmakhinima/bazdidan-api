@@ -8,6 +8,7 @@ import { ClientRequestModule } from './client-request/client-request.module';
 import { NotificationModule } from './notification/notification.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CategoryModule } from './category/category.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CategoryModule } from './category/category.module';
     ClientRequestModule,
     NotificationModule,
     CategoryModule,
+    ChatModule,
   ],
 })
 export class AppModule {}

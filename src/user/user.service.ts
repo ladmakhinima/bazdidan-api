@@ -24,6 +24,15 @@ export class UserService {
         'شماره تماس وارد شده از قبل توی سیستم ثبت شده است',
       );
     }
+
+    dto.estateAgency = await this.prisma.estateAgency.findUnique({
+      where: { id: dto.estateAgency as number },
+    });
+
+    if (!dto.estateAgency) {
+      throw new NotFoundException('آژانس تبلیغاتی با این شناسه یافت نشد');
+    }
+
     dto.password = await bcrypt.hash(dto.password, 8);
     return this.prisma.user.create({
       data: {
@@ -35,6 +44,7 @@ export class UserService {
         bio: dto.bio,
         status: 'ACTIVE',
         role: dto.isClient ? 'CLIENT' : 'ESTATE_CONSULTANT',
+        estateAgencyId: dto.estateAgency.id,
       },
     });
   }
@@ -42,6 +52,9 @@ export class UserService {
   async findUserById(id: number, role: UserRole) {
     const user = await this.prisma.user.findUnique({
       where: { id, role },
+      include: {
+        estateAgency: true,
+      },
     });
     if (!user) {
       throw new NotFoundException(
