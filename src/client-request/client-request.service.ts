@@ -47,13 +47,19 @@ export class ClientRequestService {
       });
 
       //   send notification through websocket to consultant
-      this.eventEmitter.emit('SEND_MESSAGE_TO_CONSULTANT_FOR_REQUEST', {
-        houseAd,
-      });
+      this.eventEmitter.emit(
+        'NOTIFICATION.SEND_MESSAGE_TO_CONSULTANT_FOR_REQUEST',
+        {
+          houseAd,
+        },
+      );
       //   send notification through websocket to estateAgency
-      this.eventEmitter.emit('SEND_MESSAGE_TO_CONSULTANT_FOR_REQUEST', {
-        houseAd,
-      });
+      this.eventEmitter.emit(
+        'NOTIFICATION.SEND_MESSAGE_TO_CONSULTANT_FOR_REQUEST',
+        {
+          houseAd,
+        },
+      );
     }
 
     return {

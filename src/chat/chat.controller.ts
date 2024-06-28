@@ -6,6 +6,7 @@ import {
   Inject,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -51,5 +52,14 @@ export class ChatController {
     @LoggedInUser() loggedInUser: User,
   ) {
     return this.chatService.deleteMessage(loggedInUser, id);
+  }
+
+  @Patch('seen/:id')
+  @UseGuards(AccessTokenGuard)
+  seenMessageByUser(
+    @LoggedInUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.chatService.seenMessage(user, id);
   }
 }

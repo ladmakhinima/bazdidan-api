@@ -171,4 +171,5 @@ model Chat {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
+  seen        Boolean   @default(false)
 }

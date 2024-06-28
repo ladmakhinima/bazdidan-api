@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { OnEvent } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { JwtService } from '@nestjs/jwt';
 import {
   OnGatewayConnection,
@@ -12,7 +12,6 @@ import {
 } from '@nestjs/websockets';
 import { Chat } from '@prisma/client';
 import { Server, Socket } from 'socket.io';
-import { PrismaService } from 'src/config/prisma/prisma.service';
 import { JWT_KEY } from 'src/constants/env.constant';
 
 @WebSocketGateway()
@@ -20,11 +19,9 @@ import { JWT_KEY } from 'src/constants/env.constant';
 export class NotificationGateway
   implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection
 {
-  private clients: Map<number, Socket> = new Map();
-
+  @Inject(EventEmitter2) private readonly eventEmitter: EventEmitter2;
   @Inject(JwtService) private readonly jwtService: JwtService;
   @Inject(ConfigService) private readonly configService: ConfigService;
-  @Inject(PrismaService) private readonly prismaService: PrismaService;
   @WebSocketServer() ws: Socket;
 
   afterInit(server: Server) {
@@ -33,12 +30,12 @@ export class NotificationGateway
 
   async handleDisconnect(client: Socket) {
     if (client?.data?.user?.id) {
-      this.clients.delete(client?.data?.user?.id);
-      await this.prismaService.user.update({
-        where: { id: client?.data?.user?.id },
-        data: { isOnline: false },
+      this.eventEmitter.emit('USER.CHANGE_STATUS', {
+        isOnline: false,
+        id: client?.data?.user?.id,
       });
     }
+    client.broadcast.emit('NOTIFICATION.USER_DISCONNECT');
 
     console.log('Client Disconnected');
   }
@@ -62,49 +59,44 @@ export class NotificationGateway
 
     client.data.user = decodedToken;
 
-    this.clients.set(decodedToken.id, client);
-
-    await this.prismaService.user.update({
-      where: { id: decodedToken.id },
-      data: { isOnline: true },
+    this.eventEmitter.emit('USER.CHANGE_STATUS', {
+      isOnline: true,
+      id: decodedToken?.id,
     });
+
+    client.broadcast.emit('NOTIFICATION.USER_CONNECT');
 
     console.log('Client Connected');
   }
 
-  @OnEvent('SEND_MESSAGE_TO_CONSULTANT_FOR_REQUEST')
+  @OnEvent('NOTIFICATION.SEND_MESSAGE_TO_CONSULTANT_FOR_REQUEST')
   sendMessageToConsultantForRequest(data) {
     // !TODO: send message with client map to only send message to one user
-    this.ws.emit('client_request_consultant_receive_ad', data);
+    this.ws.emit('NOTIFICATION.CLIENT_REQUEST_CONSULTANT_RECEIVE_AD', data);
   }
 
-  @OnEvent('SEND_MESSAGE_TO_CONSULTANT_FOR_REQUEST')
+  @OnEvent('NOTIFICATION.SEND_MESSAGE_TO_CONSULTANT_FOR_REQUEST')
   sendMessageToEstateAgencyForRequest(data) {
-    this.ws.emit('client_request_estate_agency_receive_ad', data);
+    this.ws.emit('NOTIFICATION.CLIENT_REQUEST_ESTATE_AGENCY_RECEIVE_AD', data);
   }
 
-  @OnEvent('CHAT.NEW_MESSAGE')
+  @OnEvent('NOTIFICATION.CHAT_NEW_MESSAGE')
   sendNewMessageNotifyToUser(data: Chat) {
-    this.ws.emit('new_message_create', data);
+    this.ws.emit('NOTIFICATION.CHAT_NEW_MESSAGE', data);
   }
 
-  @OnEvent('CHAT.DELETE_MESSAGE')
+  @OnEvent('NOTIFICATION.CHAT_DELETE_MESSAGE')
   sendDeletedMessageNotifyToUser(data: Chat) {
-    this.ws.emit('delete_message', data);
+    this.ws.emit('NOTIFICATION.CHAT_DELETE_MESSAGE', data);
   }
 
-  @SubscribeMessage('chat_user_typing')
+  @OnEvent('NOTIFICATION.CHAT_SEEN_MESSAGE')
+  sendSeenMessageNotifyToUser(data: Chat) {
+    this.ws.emit('NOTIFICATION.CHAT_SEEN_MESSAGE', data);
+  }
+
+  @SubscribeMessage('NOTIFICATION.CHAT_USER_TYPING')
   sendTypingNotifyToChatReceiver(data: any) {
-    this.ws.emit('user_typing', data);
-  }
-
-  @SubscribeMessage('user_online')
-  sendOnlineNotifyToChatReceiver(data: any) {
-    this.ws.emit('user_online', data);
-  }
-
-  @SubscribeMessage('user_offline')
-  sendOfflineNotifyToChatReceiver(data: any) {
-    this.ws.emit('user_offline', data);
+    this.ws.emit('NOTIFICATION.CHAT_USER_TYPING', data);
   }
 }

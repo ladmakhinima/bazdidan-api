@@ -51,7 +51,7 @@ export class ChatService {
       include: { houseAd: true, parent: true, receiver: true, sender: true },
     });
 
-    this.eventEmitter.emit('CHAT.NEW_MESSAGE', { newMessage });
+    this.eventEmitter.emit('NOTIFICATION.CHAT_NEW_MESSAGE', { newMessage });
 
     return newMessage;
   }
@@ -131,8 +131,38 @@ export class ChatService {
       include: { houseAd: true, parent: true, receiver: true, sender: true },
     });
 
-    this.eventEmitter.emit('CHAT.DELETE_MESSAGE', { deletedMessage });
+    this.eventEmitter.emit('NOTIFICATION.CHAT_DELETE_MESSAGE', {
+      deletedMessage,
+    });
 
     return deletedMessage;
+  }
+
+  async seenMessage(sender: User, id: number) {
+    const message = await this.prismaService.chat.findFirst({
+      where: {
+        senderId: sender.id,
+        id,
+      },
+    });
+
+    if (!message) {
+      throw new NotFoundException('پیامی یافت نشد');
+    }
+
+    const updatedMessage = await this.prismaService.chat.update({
+      where: {
+        id,
+        senderId: sender.id,
+      },
+      data: { seen: true },
+      include: { houseAd: true, parent: true, receiver: true, sender: true },
+    });
+
+    this.eventEmitter.emit('NOTIFICATION.CHAT_SEEN_MESSAGE', {
+      updatedMessage,
+    });
+
+    return updatedMessage;
   }
 }
