@@ -1,0 +1,1010 @@
+{
+	"info": {
+		"_postman_id": "f397b718-d42f-4d36-a4ad-a7259beeffe1",
+		"name": "bazdidan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36411300"
+	},
+	"item": [
+		{
+			"name": "Estate Agencies",
+			"item": [
+				{
+					"name": "Create New Estate Agency",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"managerName\": \"پدرام پورمهر\",\r\n    \"name\": \"دنیای سپید\",\r\n    \"address\": \"جردن برچ آناهیتا پلاک 59 واحد 2\",\r\n    \"phone\": \"09925087570\",\r\n    \"logo\": \"some logo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/estate-agency",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"estate-agency"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List of Estate Agencies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/estate-agency?limit=10&page=0",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"estate-agency"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Etate Agency By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/estate-agency/:estate-id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"estate-agency",
+								":estate-id"
+							],
+							"variable": [
+								{
+									"key": "estate-id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Estate Agency By Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"managerName\": \"پدرام پورمهر\",\r\n    \"name\": \"دنیای سپید\",\r\n    \"status\": \"NOT_APPROVE\",\r\n    \"logo\": \"some logo update\",\r\n    \"phone\": \"09925087570\",\r\n    \"address\": \"جردن برچ آناهیتا پلاک 59 واحد 2\",\r\n    \"createdAt\": \"2024-06-24T09:46:14.371Z\",\r\n    \"updatedAt\": \"2024-06-24T09:46:14.371Z\",\r\n    \"deletedAt\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/estate-agency/:estate-id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"estate-agency",
+								":estate-id"
+							],
+							"variable": [
+								{
+									"key": "estate-id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Estate Agency By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/estate-agency/:estate-id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"estate-agency",
+								":estate-id"
+							],
+							"variable": [
+								{
+									"key": "estate-id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Logo For Estate Agency",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "logo",
+									"type": "file",
+									"src": "/C:/Users/aghan/Downloads/logo_99d5e95e-9809-43a2-b758-d561c14bd135.webp"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/estate-agency/upload-logo",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"estate-agency",
+								"upload-logo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User And Estate Consultant",
+			"item": [
+				{
+					"name": "Create User Or Estate Consultant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isClient\": true,\r\n    \"firstName\": \"محمد\",\r\n    \"lastName\": \"علیزاده\",\r\n    \"phone\": \"09396162012\",\r\n    \"password\": \"nima1381\",\r\n    \"profile\": \"xxx\",\r\n    \"bio\": \"hello\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find User Or Estate Consultant By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/detail/:role/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"detail",
+								":role",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "role",
+									"value": "estate_consultant",
+									"description": "estate_consultant | client"
+								},
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Users Or Estate Consultant",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/:role?limit=10&page=0",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								":role"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								}
+							],
+							"variable": [
+								{
+									"key": "role",
+									"value": "estate_consultant",
+									"description": "estate_consultant | client"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Or Estate Consultant By Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"firstName\": \"علی\",\r\n    \"lastName\": \"علیزاده\",\r\n    \"phone\": \"09396162052\",\r\n    \"password\": \"$2a$08$W.HfQts3sZpnHHgcue.CquvHJHegk8y2sRa2lb59zklm5F0c46wiG\",\r\n    \"profile\": \"xxx\",\r\n    \"status\": \"ACTIVE\",\r\n    \"bio\": null,\r\n    \"role\": \"ESTATE_CONSULTANT\",\r\n    \"createdAt\": \"2024-06-24T10:38:37.590Z\",\r\n    \"updatedAt\": \"2024-06-24T10:38:37.590Z\",\r\n    \"deletedAt\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User Or Estate Consultant By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Profile For Estate Consultant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profile",
+									"type": "file",
+									"src": "/C:/Users/aghan/Downloads/Mark_Zuckerberg_at_the_37th_G8_Summit_in_Deauville_018_v1.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/user/upload-profile",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"upload-profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json();\r",
+									"pm.environment.set(\"token\", body.token);\r",
+									"pm.environment.set(\"refreshToken\", body.refreshToken);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"09396162052\",\r\n    \"password\": \"nima1381\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Signup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json();\r",
+									"pm.environment.set(\"token\", body.token);\r",
+									"pm.environment.set(\"refreshToken\", body.refreshToken);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"حسین\",\r\n    \"lastName\": \"لادمخی نژاد\",\r\n    \"profile\": \"logo.png\",\r\n    \"isClient\": false,\r\n    \"phone\": \"09396162052\",\r\n    \"password\": \"nima1381\",\r\n    \"bio\": \"سلام من لادمخی نژاد هستم با بیش از ده سال سابقه\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/signup",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json();\r",
+									"pm.environment.set(\"token\", body.token);\r",
+									"pm.environment.set(\"refreshToken\", body.refreshToken);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"refreshToken\": \"{{refreshToken}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/refresh-token",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "House Ad",
+			"item": [
+				{
+					"name": "Create House Ad",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"آپارتمان  90 متری 2 خواب  شهران جنوبی\",\r\n    \"type\": \"SIMPLE\",\r\n    \"pricePerMeter\": 50000,\r\n    \"description\": \"لوکیشن عااالی فروش فوووووری زیر قیمت منطقه دنج وکم واحد دسترسی فوق العاده فاصله تا مترو کمتر از 5 دقیقه سالن بزرگ وبدون پرتی هر و خواب بزرگ و با قابلیت چیدمان تخت دو نفره وفضای اصافی تراس بزرگ وقابل چیدمان فول بازسازی شده دپارتمان بزرگ املاک اوپال آقای یکتا\",\r\n    \"yearOfConstruction\": \"1400\",\r\n    \"attachments\": [\r\n        \"1.jpg\"\r\n    ],\r\n    \"meterage\": 100,\r\n    \"roomNumber\": 40,\r\n    \"address\": \"تهران ، منطقه 5 ، شهر زیبا\",\r\n    \"houseType\": \"BUY\",\r\n    \"estateAgency\": 1,\r\n    \"options\": [\r\n        \"انباری\",\r\n        \"بالکن\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/house-ad",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"house-ad"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get House Ads List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/house-ad?limit=10&page=0",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"house-ad"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get House Ad By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/house-ad/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"house-ad",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update House Ad By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"ویرایش\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/house-ad/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"house-ad",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete House Ad By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/house-ad/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"house-ad",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Attachments Of House Ad",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/C:/Users/aghan/Downloads/ezgif.com-webp-to-png-converter.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/house-ad/upload-attachments",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"house-ad",
+								"upload-attachments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Client Request",
+			"item": [
+				{
+					"name": "Send Client Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"SIMPLE | SPECIAL\",\r\n    \"pricePerMeter\": 10000,\r\n    \"houseType\": \"RENT | MORTGAGE | BUY\",\r\n    \"yearOfConstruction\": \"1400\",\r\n    \"meterage\": \"100\",\r\n    \"roomNumber\": \"1\",\r\n    \"options\": [\"انباری\"],\r\n    \"estateAgencyId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/client-request",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"client-request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List Of Client Requests",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/client-request/collections/:mode?page=0&limit=10&estateAgencyId=1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"client-request",
+								"collections",
+								":mode"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "estateAgencyId",
+									"value": "1",
+									"description": "when you want to read the requests of estate agencies"
+								}
+							],
+							"variable": [
+								{
+									"key": "mode",
+									"value": "estate-agency",
+									"description": "forexample you want to see reports for estate agency or client or consultant\nclient | consultant | estate-agency"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Client Request By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/client-request/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"client-request",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Get Categories List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/category?limit=10&page=0",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"category"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/category/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "پردیس",
+									"type": "text"
+								},
+								{
+									"key": "isVisible",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Asus/OneDrive/Desktop/pardis.webp"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/category",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "تهران",
+									"type": "text"
+								},
+								{
+									"key": "isVisible",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/category/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/category/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
